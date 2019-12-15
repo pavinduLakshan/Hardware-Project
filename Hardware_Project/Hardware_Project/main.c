@@ -21,7 +21,7 @@
 //void formatID(uint16_t );
 void GSM_setup();
 void sendMsg(unsigned char p_status,char* num);
-//void query_database(char* id);
+void query_database(char* id);
 //void issue_tutorial();
 //void messaging();
 
@@ -29,8 +29,13 @@ void sendMsg(unsigned char p_status,char* num);
 void GSM_interact(char* ,char* ,char* );
 void GSM_Send_Msg(char* ,char* );
 void LCD_Write_xy(char a,char b,char* str);
+void parse_data(char* data);
 
 char buff[160];
+char data[160];
+char name[20];
+char phone[13];
+
 volatile int buffer_pointer;
 int position = 0;
 
@@ -49,12 +54,12 @@ int main(void)
 	sei();//enable global interrupts
 	GSM_setup();
 	_delay_ms(1000);
-	sendMsg(1,"+94716830842");
+query_database("1");
 	while(1)
 	{
 		//get ID from finger print scanner
 		//send ID to database
-		//get response
+		//get response 	sendMsg(1,"+94716830842");
 		//take action based on whether student has paid or not
 	}
 }
@@ -68,9 +73,9 @@ ISR(USART_RXC_vect)
 
 void GSM_setup(){
 	GSM_interact(GSM_BEGIN,"began","Error");
-// 	GSM_interact(SET_GPRS,"GPRS Error");
-// 	GSM_interact(SET_APN,"APN Error");
-// 	GSM_interact(ENABLE_GPRS,"GPRS is disable");
+ 	GSM_interact(SET_GPRS,"SET GPRS","GPRS Error");
+ 	GSM_interact(SET_APN,"SET APN","APN Error");
+ 	GSM_interact(ENABLE_GPRS,"EN GPRS","GPRS is disable");
 }
 
 void GSM_interact(char* AT_command,char* success,char* show_error){
@@ -116,6 +121,71 @@ void sendMsg(unsigned char p_status,char* num){
 	}
 }
 
+void query_database(char* id){
+	GSM_interact(ENABLE_HTTP,"HTTP Enabled","HTTP is disable");
+	//GSM_interact(ENABLE_HTTPS,"HTTPS is disable");
+	GSM_interact(SET_PROFILE,"Profile set","Profile error");
+	
+	char SET_URL[400];
+	strcpy(SET_URL,"AT+HTTPPARA=\"URL\",\"http://hardware-back.herokuapp.com/students/");
+	strcat(SET_URL, id);
+	strcat(SET_URL,"\"\r");
+	
+	GSM_interact(SET_URL,"URL Success","URL error");
+	
+	//GSM_interact("AT+HTTPSSL?\r","NOT HTTPS");
+	GSM_interact(START_GET,"GET success","GET error");
+	_delay_ms(3000);//This delay is essential for retrieving information.don't remove it.
+	memset(buff,0,160);
+	//_delay_ms(3000);
+	buffer_pointer = 0;
+	_delay_ms(1000); 
+	Lcd4_Clear();
+	LCD_Write_xy(1,1,"0");
+	USART_SendString(READ_DATA);
+	Lcd4_Clear();
+	LCD_Write_xy(1,1,"1");
+	_delay_ms(5000);
+	
+	/*int q = 0;
+	while(q < strlen(buff)){
+		strncpy(data, buff+q,16);
+		Lcd4_Clear();
+		LCD_Write_xy(1,1,data);
+		_delay_ms(4500);
+		q += 16;
+	}*/
+	
+	/*while(buff[buffer_pointer] != '{'){
+		buffer_pointer++;
+	}
+	Lcd4_Clear();
+	LCD_Write_xy(1,1,"2");
+	strncpy(data, buff+30,buffer_pointer);*/
+	
+	
+	strcpy(data,buff);
+	Lcd4_Clear();
+	LCD_Write_xy(1,1,"Please wait");
+	_delay_ms(3000);
+	parse_data(data);
+	Lcd4_Clear();
+	//LCD_Write_xy(1,1,data);
+	_delay_ms(3000);
+	Lcd4_Clear();
+	Lcd4_Write_String(name);
+	_delay_ms(3000);
+	Lcd4_Clear();
+	Lcd4_Write_String(phone);
+	_delay_ms(3000);
+	
+	memset(buff,0,160);
+	GSM_interact(TERMINATE_SESSION,"Terminated","Terminate Error");
+	
+	memset(data,0,50);
+	GSM_interact(DISABLE_GPRS,"GPRS disable","ERROR DISABLING");
+}
+
 void GSM_Send_Msg(char *num,char *sms)
 {
 	char sms_buffer[35];
@@ -144,4 +214,29 @@ void GSM_Send_Msg(char *num,char *sms)
 void LCD_Write_xy(char a,char b,char* str){
 	Lcd4_Set_Cursor(a,b);
 	Lcd4_Write_String(str);
+}
+
+void parse_data(char* data){
+	int name_start = 0;
+	int j=0;
+	int i=0;
+	int mobile_start = 0;
+
+	while(i < strlen(data)-1){
+		if(j==2){
+			break;
+		}
+		if(data[i] == ':' && data[i+1] == '"'){
+			j++;
+			if(j==1){
+				name_start = i+2;
+			}
+			else if(j==2){
+				mobile_start = i+1;
+			}
+		}
+		i++;
+	}
+	strncpy(name,data+name_start,mobile_start-name_start-6);
+	strncpy(phone,data+mobile_start+1,12);
 }
