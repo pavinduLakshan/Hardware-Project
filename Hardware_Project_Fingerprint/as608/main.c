@@ -32,7 +32,7 @@ int main(void)
     while (1) 
     { 
 		LCDWriteStringXY(0,0,"Welcome!");
-		
+		_delay_ms(2000);
 		if(enroll_key_press())
 		{
 			finger_enrollment();
@@ -48,8 +48,8 @@ int main(void)
 
 void keys_init()
 {
-	DDRC &= ~(1<<PINC0); //Enroll Key
-	DDRC &= ~(1<<PINC2); //Scan key
+	DDRC &= ~(1<<PINC0); //init Enroll Key as input
+	DDRC &= ~(1<<PINC2); //init Scan key as input
 	PORTC |= 1<<PINC0;
 	PORTC |= 1<<PINC2;
 	
@@ -107,9 +107,17 @@ void finger_scan()
 	process_result(code);
 	if(code==0x00)
 	{
+			LCDClear();
+			// LCDWriteStringXY(0,1,"Success");
+			LCDWriteIntXY(0,1,code,6);
 		PORTC &=~(1<<PINC5);
 		_delay_ms(5000);
 		PORTC |= 1<<PINC5;
+	}
+	else{
+					LCDClear();
+					//LCDWriteStringXY(0,1,"Error");
+					LCDWriteIntXY(0,1,code,6);
 	}
 	_delay_ms(4000);
 	LCDClear();
