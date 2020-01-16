@@ -187,6 +187,31 @@ uint16_t finger_read(){
 	return code;
 }
 
+uint16_t upImg(){
+	finger_transmit_header(0x0003);
+	
+	finger_uart_transmit(0x0A);
+	
+	finger_uart_transmit(0x00);
+	finger_uart_transmit(0x0E);
+	
+	return finger_receive();
+}
+
+uint16_t upChar(uint16_t buff_id){
+	finger_transmit_header(0x0004);
+	
+	finger_uart_transmit(0x08); //instruction
+	
+	finger_uart_transmit(buff_id); //buffer number
+	
+	buff_id += 7; //sum
+	finger_uart_transmit(buff_id & 0xFF00);
+	finger_uart_transmit(buff_id & 0x00FF);
+	
+	return finger_receive();
+}
+
 uint16_t finger_generate_char_file(uint16_t buff_id){
 	finger_transmit_header(0x0004);
 	

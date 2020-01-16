@@ -30,6 +30,8 @@ void GSM_interact(char* ,char* ,char* );
 void GSM_Send_Msg(char* ,char* );
 void LCD_Write_xy(char a,char b,char* str);
 void parse_data(char* data);
+void spi_init_slave (void);
+char spi_tranceiver(char data);
 
 char buff[160];
 char data[160];
@@ -46,15 +48,21 @@ int main(void)
 	buffer_pointer = 0;
 	Lcd4_Init();
 	Lcd4_Clear();
+	spi_init_slave();
 	LCD_Write_xy(1,4,"Group 35");
 	_delay_ms(1000);
 	LCD_Write_xy(2,1,"   Starting..   ");
 	_delay_ms(1000);
 	USART_Init(9600);	//initialize USART
 	sei();//enable global interrupts
-	GSM_setup();
+	//GSM_setup();
 	_delay_ms(1000);
-query_database("1");
+	char t = spi_tranceiver('l');
+	_delay_ms(3000);
+	Lcd4_Clear();
+	Lcd4_Write_Char(t);
+	//query_database("1");
+	//sendMsg(0,phone);
 	while(1)
 	{
 		//get ID from finger print scanner
@@ -111,10 +119,12 @@ void sendMsg(unsigned char p_status,char* num){
 		//send message
 		GSM_Send_Msg(num,"Student came to class");
 		//issue tutorial
+		Lcd4_Clear();
+		LCD_Write_xy(1,1,"Good to go");
 	}
 	else{
 		//send message
-		GSM_Send_Msg(num,"Student haven't paid");
+		GSM_Send_Msg(num,"Student hasn't paid");
 		//show error
 		Lcd4_Clear();
 		LCD_Write_xy(2,0,"You haven't paid");
@@ -144,8 +154,8 @@ void query_database(char* id){
 	LCD_Write_xy(1,1,"0");
 	USART_SendString(READ_DATA);
 	Lcd4_Clear();
-	LCD_Write_xy(1,1,"1");
-	_delay_ms(5000);
+	LCD_Write_xy(1,1,"Please wait");
+	_delay_ms(10000);
 	
 	/*int q = 0;
 	while(q < strlen(buff)){
@@ -183,7 +193,7 @@ void query_database(char* id){
 	GSM_interact(TERMINATE_SESSION,"Terminated","Terminate Error");
 	
 	memset(data,0,50);
-	GSM_interact(DISABLE_GPRS,"GPRS disable","ERROR DISABLING");
+	GSM_interact(DISABLE_GPRS,"GPRS disable","Error disabling");
 }
 
 void GSM_Send_Msg(char *num,char *sms)
@@ -239,4 +249,24 @@ void parse_data(char* data){
 	}
 	strncpy(name,data+name_start,mobile_start-name_start-6);
 	strncpy(phone,data+mobile_start+1,12);
+}
+
+// Initialize SPI Slave Device
+void spi_init_slave (void)
+{
+	DDRB &= ~(1<<PINB5); //Set MOSI as input
+	DDRB &= ~(1<<PINB7); //Set SCK as input
+	DDRB |= (1<<PINB6);  //Set MISO as output
+	DDRB &= ~(1<<PINB4);   //SS as input
+	SPCR = (1<<SPE);   //Enable SPI
+}
+
+char spi_tranceiver (char data)
+{
+	// Load data into the buffer
+	SPDR = data;
+	//Wait until transmission complete
+	while(!(SPSR & (1<<SPIF) ));
+	// Return received data
+	return(SPDR);
 }

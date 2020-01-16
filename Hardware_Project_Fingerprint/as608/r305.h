@@ -25,7 +25,8 @@ uint16_t finger_delete_all();					// delete all the templates in flash store
 uint16_t finger_store(uint16_t);				// stores fingerprint template at given location. send location from finger_get_storage_location();
 uint16_t finger_delete(uint16_t);				// delets the template at the location. send location to delete
 uint16_t finger_search();						// search flash sotreage for matching templates
-
+uint16_t upImg();
+uint16_t upChar(uint16_t);
 #endif /* R305_H_ */
 
 

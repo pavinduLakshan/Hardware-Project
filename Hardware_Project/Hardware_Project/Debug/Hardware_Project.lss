@@ -3,31 +3,31 @@ Hardware_Project.elf:     file format elf32-avr
 
 Sections:
 Idx Name          Size      VMA       LMA       File off  Algn
-  0 .text         00000ac4  00000000  00000000  00000094  2**1
+  0 .text         000006e6  00000000  00000000  00000094  2**1
                   CONTENTS, ALLOC, LOAD, READONLY, CODE
-  1 .data         00000266  00800060  00000ac4  00000b58  2**0
+  1 .data         0000026e  00800060  000006e6  0000077a  2**0
                   CONTENTS, ALLOC, LOAD, DATA
-  2 .bss          00000163  008002c6  008002c6  00000dbe  2**0
+  2 .bss          00000163  008002ce  008002ce  000009e8  2**0
                   ALLOC
-  3 .comment      00000030  00000000  00000000  00000dbe  2**0
+  3 .comment      00000030  00000000  00000000  000009e8  2**0
                   CONTENTS, READONLY
-  4 .note.gnu.avr.deviceinfo 0000003c  00000000  00000000  00000df0  2**2
+  4 .note.gnu.avr.deviceinfo 0000003c  00000000  00000000  00000a18  2**2
                   CONTENTS, READONLY
-  5 .debug_aranges 00000130  00000000  00000000  00000e2c  2**0
+  5 .debug_aranges 00000140  00000000  00000000  00000a54  2**0
                   CONTENTS, READONLY, DEBUGGING
-  6 .debug_info   00002350  00000000  00000000  00000f5c  2**0
+  6 .debug_info   00002420  00000000  00000000  00000b94  2**0
                   CONTENTS, READONLY, DEBUGGING
-  7 .debug_abbrev 0000081e  00000000  00000000  000032ac  2**0
+  7 .debug_abbrev 00000861  00000000  00000000  00002fb4  2**0
                   CONTENTS, READONLY, DEBUGGING
-  8 .debug_line   00000ec5  00000000  00000000  00003aca  2**0
+  8 .debug_line   00000f49  00000000  00000000  00003815  2**0
                   CONTENTS, READONLY, DEBUGGING
-  9 .debug_frame  00000344  00000000  00000000  00004990  2**2
+  9 .debug_frame  00000364  00000000  00000000  00004760  2**2
                   CONTENTS, READONLY, DEBUGGING
- 10 .debug_str    000005d9  00000000  00000000  00004cd4  2**0
+ 10 .debug_str    000005f7  00000000  00000000  00004ac4  2**0
                   CONTENTS, READONLY, DEBUGGING
- 11 .debug_loc    000014fe  00000000  00000000  000052ad  2**0
+ 11 .debug_loc    00001583  00000000  00000000  000050bb  2**0
                   CONTENTS, READONLY, DEBUGGING
- 12 .debug_ranges 00000110  00000000  00000000  000067ab  2**0
+ 12 .debug_ranges 00000120  00000000  00000000  0000663e  2**0
                   CONTENTS, READONLY, DEBUGGING
 
 Disassembly of section .text:
@@ -67,18 +67,18 @@ Disassembly of section .text:
   60:	12 e0       	ldi	r17, 0x02	; 2
   62:	a0 e6       	ldi	r26, 0x60	; 96
   64:	b0 e0       	ldi	r27, 0x00	; 0
-  66:	e4 ec       	ldi	r30, 0xC4	; 196
-  68:	fa e0       	ldi	r31, 0x0A	; 10
+  66:	e6 ee       	ldi	r30, 0xE6	; 230
+  68:	f6 e0       	ldi	r31, 0x06	; 6
   6a:	02 c0       	rjmp	.+4      	; 0x70 <__do_copy_data+0x10>
   6c:	05 90       	lpm	r0, Z+
   6e:	0d 92       	st	X+, r0
-  70:	a6 3c       	cpi	r26, 0xC6	; 198
+  70:	ae 3c       	cpi	r26, 0xCE	; 206
   72:	b1 07       	cpc	r27, r17
   74:	d9 f7       	brne	.-10     	; 0x6c <__do_copy_data+0xc>
 
 00000076 <__do_clear_bss>:
   76:	24 e0       	ldi	r18, 0x04	; 4
-  78:	a6 ec       	ldi	r26, 0xC6	; 198
+  78:	ae ec       	ldi	r26, 0xCE	; 206
   7a:	b2 e0       	ldi	r27, 0x02	; 2
   7c:	01 c0       	rjmp	.+2      	; 0x80 <.do_clear_bss_start>
 
@@ -86,21 +86,21 @@ Disassembly of section .text:
   7e:	1d 92       	st	X+, r1
 
 00000080 <.do_clear_bss_start>:
-  80:	a9 32       	cpi	r26, 0x29	; 41
+  80:	a1 33       	cpi	r26, 0x31	; 49
   82:	b2 07       	cpc	r27, r18
   84:	e1 f7       	brne	.-8      	; 0x7e <.do_clear_bss_loop>
-  86:	0e 94 81 04 	call	0x902	; 0x902 <main>
-  8a:	0c 94 60 05 	jmp	0xac0	; 0xac0 <_exit>
+  86:	0e 94 d2 02 	call	0x5a4	; 0x5a4 <main>
+  8a:	0c 94 71 03 	jmp	0x6e2	; 0x6e2 <_exit>
 
 0000008e <__bad_interrupt>:
   8e:	0c 94 00 00 	jmp	0	; 0x0 <__vectors>
 
 00000092 <pinChange>:
-		GSM_Send_Msg(num,"Student haven't paid");
-		//show error
-		Lcd4_Clear();
-		LCD_Write_xy(2,0,"You haven't paid");
-	}
+	memset(buff,0,160);
+	GSM_interact(TERMINATE_SESSION,"Terminated","Terminate Error");
+	
+	memset(data,0,50);
+	GSM_interact(DISABLE_GPRS,"GPRS disable","Error disabling");
 }
   92:	67 2b       	or	r22, r23
   94:	09 f0       	breq	.+2      	; 0x98 <pinChange+0x6>
@@ -681,17 +681,17 @@ Disassembly of section .text:
  53c:	9f 93       	push	r25
  53e:	ef 93       	push	r30
  540:	ff 93       	push	r31
- 542:	e0 91 06 04 	lds	r30, 0x0406	; 0x800406 <buffer_pointer>
- 546:	f0 91 07 04 	lds	r31, 0x0407	; 0x800407 <buffer_pointer+0x1>
+ 542:	e0 91 0e 04 	lds	r30, 0x040E	; 0x80040e <buffer_pointer>
+ 546:	f0 91 0f 04 	lds	r31, 0x040F	; 0x80040f <buffer_pointer+0x1>
  54a:	8c b1       	in	r24, 0x0c	; 12
- 54c:	ea 53       	subi	r30, 0x3A	; 58
+ 54c:	e2 53       	subi	r30, 0x32	; 50
  54e:	fd 4f       	sbci	r31, 0xFD	; 253
  550:	80 83       	st	Z, r24
- 552:	80 91 06 04 	lds	r24, 0x0406	; 0x800406 <buffer_pointer>
- 556:	90 91 07 04 	lds	r25, 0x0407	; 0x800407 <buffer_pointer+0x1>
+ 552:	80 91 0e 04 	lds	r24, 0x040E	; 0x80040e <buffer_pointer>
+ 556:	90 91 0f 04 	lds	r25, 0x040F	; 0x80040f <buffer_pointer+0x1>
  55a:	01 96       	adiw	r24, 0x01	; 1
- 55c:	90 93 07 04 	sts	0x0407, r25	; 0x800407 <buffer_pointer+0x1>
- 560:	80 93 06 04 	sts	0x0406, r24	; 0x800406 <buffer_pointer>
+ 55c:	90 93 0f 04 	sts	0x040F, r25	; 0x80040f <buffer_pointer+0x1>
+ 560:	80 93 0e 04 	sts	0x040E, r24	; 0x80040e <buffer_pointer>
  564:	ff 91       	pop	r31
  566:	ef 91       	pop	r30
  568:	9f 91       	pop	r25
@@ -713,793 +713,230 @@ Disassembly of section .text:
  588:	cf 91       	pop	r28
  58a:	08 95       	ret
 
-0000058c <GSM_interact>:
- 58c:	cf 92       	push	r12
- 58e:	df 92       	push	r13
- 590:	ef 92       	push	r14
- 592:	ff 92       	push	r15
- 594:	1f 93       	push	r17
- 596:	cf 93       	push	r28
- 598:	df 93       	push	r29
- 59a:	ec 01       	movw	r28, r24
- 59c:	6b 01       	movw	r12, r22
- 59e:	7a 01       	movw	r14, r20
- 5a0:	10 ea       	ldi	r17, 0xA0	; 160
- 5a2:	10 92 07 04 	sts	0x0407, r1	; 0x800407 <buffer_pointer+0x1>
- 5a6:	10 92 06 04 	sts	0x0406, r1	; 0x800406 <buffer_pointer>
- 5aa:	ce 01       	movw	r24, r28
- 5ac:	0e 94 f4 04 	call	0x9e8	; 0x9e8 <USART_SendString>
- 5b0:	2f ef       	ldi	r18, 0xFF	; 255
- 5b2:	89 e6       	ldi	r24, 0x69	; 105
- 5b4:	98 e1       	ldi	r25, 0x18	; 24
- 5b6:	21 50       	subi	r18, 0x01	; 1
- 5b8:	80 40       	sbci	r24, 0x00	; 0
- 5ba:	90 40       	sbci	r25, 0x00	; 0
- 5bc:	e1 f7       	brne	.-8      	; 0x5b6 <GSM_interact+0x2a>
- 5be:	00 c0       	rjmp	.+0      	; 0x5c0 <GSM_interact+0x34>
- 5c0:	00 00       	nop
- 5c2:	6e e6       	ldi	r22, 0x6E	; 110
- 5c4:	70 e0       	ldi	r23, 0x00	; 0
- 5c6:	86 ec       	ldi	r24, 0xC6	; 198
- 5c8:	92 e0       	ldi	r25, 0x02	; 2
- 5ca:	0e 94 46 05 	call	0xa8c	; 0xa8c <strstr>
- 5ce:	89 2b       	or	r24, r25
- 5d0:	c1 f0       	breq	.+48     	; 0x602 <GSM_interact+0x76>
- 5d2:	0e 94 ee 01 	call	0x3dc	; 0x3dc <Lcd4_Clear>
- 5d6:	a6 01       	movw	r20, r12
- 5d8:	61 e0       	ldi	r22, 0x01	; 1
- 5da:	81 e0       	ldi	r24, 0x01	; 1
- 5dc:	0e 94 bb 02 	call	0x576	; 0x576 <LCD_Write_xy>
- 5e0:	af ef       	ldi	r26, 0xFF	; 255
- 5e2:	b9 e6       	ldi	r27, 0x69	; 105
- 5e4:	28 e1       	ldi	r18, 0x18	; 24
- 5e6:	a1 50       	subi	r26, 0x01	; 1
- 5e8:	b0 40       	sbci	r27, 0x00	; 0
- 5ea:	20 40       	sbci	r18, 0x00	; 0
- 5ec:	e1 f7       	brne	.-8      	; 0x5e6 <GSM_interact+0x5a>
- 5ee:	00 c0       	rjmp	.+0      	; 0x5f0 <GSM_interact+0x64>
- 5f0:	00 00       	nop
- 5f2:	80 ea       	ldi	r24, 0xA0	; 160
- 5f4:	e6 ec       	ldi	r30, 0xC6	; 198
- 5f6:	f2 e0       	ldi	r31, 0x02	; 2
- 5f8:	df 01       	movw	r26, r30
- 5fa:	1d 92       	st	X+, r1
- 5fc:	8a 95       	dec	r24
- 5fe:	e9 f7       	brne	.-6      	; 0x5fa <GSM_interact+0x6e>
- 600:	1a c0       	rjmp	.+52     	; 0x636 <GSM_interact+0xaa>
- 602:	0e 94 ee 01 	call	0x3dc	; 0x3dc <Lcd4_Clear>
- 606:	a7 01       	movw	r20, r14
- 608:	60 e0       	ldi	r22, 0x00	; 0
- 60a:	82 e0       	ldi	r24, 0x02	; 2
- 60c:	0e 94 bb 02 	call	0x576	; 0x576 <LCD_Write_xy>
- 610:	bf ef       	ldi	r27, 0xFF	; 255
- 612:	2d e3       	ldi	r18, 0x3D	; 61
- 614:	89 e4       	ldi	r24, 0x49	; 73
- 616:	b1 50       	subi	r27, 0x01	; 1
- 618:	20 40       	sbci	r18, 0x00	; 0
- 61a:	80 40       	sbci	r24, 0x00	; 0
- 61c:	e1 f7       	brne	.-8      	; 0x616 <GSM_interact+0x8a>
- 61e:	00 c0       	rjmp	.+0      	; 0x620 <GSM_interact+0x94>
- 620:	00 00       	nop
- 622:	0e 94 ee 01 	call	0x3dc	; 0x3dc <Lcd4_Clear>
- 626:	e6 ec       	ldi	r30, 0xC6	; 198
- 628:	f2 e0       	ldi	r31, 0x02	; 2
- 62a:	df 01       	movw	r26, r30
- 62c:	21 2f       	mov	r18, r17
- 62e:	1d 92       	st	X+, r1
- 630:	2a 95       	dec	r18
- 632:	e9 f7       	brne	.-6      	; 0x62e <GSM_interact+0xa2>
- 634:	b6 cf       	rjmp	.-148    	; 0x5a2 <GSM_interact+0x16>
- 636:	df 91       	pop	r29
- 638:	cf 91       	pop	r28
- 63a:	1f 91       	pop	r17
- 63c:	ff 90       	pop	r15
- 63e:	ef 90       	pop	r14
- 640:	df 90       	pop	r13
- 642:	cf 90       	pop	r12
- 644:	08 95       	ret
-
-00000646 <GSM_setup>:
- 646:	44 eb       	ldi	r20, 0xB4	; 180
- 648:	50 e0       	ldi	r21, 0x00	; 0
- 64a:	61 e7       	ldi	r22, 0x71	; 113
- 64c:	70 e0       	ldi	r23, 0x00	; 0
- 64e:	87 e7       	ldi	r24, 0x77	; 119
- 650:	90 e0       	ldi	r25, 0x00	; 0
- 652:	0e 94 c6 02 	call	0x58c	; 0x58c <GSM_interact>
- 656:	4d e7       	ldi	r20, 0x7D	; 125
- 658:	50 e0       	ldi	r21, 0x00	; 0
- 65a:	68 e8       	ldi	r22, 0x88	; 136
- 65c:	70 e0       	ldi	r23, 0x00	; 0
- 65e:	81 e9       	ldi	r24, 0x91	; 145
- 660:	90 e0       	ldi	r25, 0x00	; 0
- 662:	0e 94 c6 02 	call	0x58c	; 0x58c <GSM_interact>
- 666:	40 eb       	ldi	r20, 0xB0	; 176
- 668:	50 e0       	ldi	r21, 0x00	; 0
- 66a:	6a eb       	ldi	r22, 0xBA	; 186
- 66c:	70 e0       	ldi	r23, 0x00	; 0
- 66e:	82 ec       	ldi	r24, 0xC2	; 194
- 670:	90 e0       	ldi	r25, 0x00	; 0
- 672:	0e 94 c6 02 	call	0x58c	; 0x58c <GSM_interact>
- 676:	4c ed       	ldi	r20, 0xDC	; 220
- 678:	50 e0       	ldi	r21, 0x00	; 0
- 67a:	6c ee       	ldi	r22, 0xEC	; 236
- 67c:	70 e0       	ldi	r23, 0x00	; 0
- 67e:	84 ef       	ldi	r24, 0xF4	; 244
- 680:	90 e0       	ldi	r25, 0x00	; 0
- 682:	0e 94 c6 02 	call	0x58c	; 0x58c <GSM_interact>
- 686:	08 95       	ret
-
-00000688 <parse_data>:
-void LCD_Write_xy(char a,char b,char* str){
-	Lcd4_Set_Cursor(a,b);
-	Lcd4_Write_String(str);
+0000058c <spi_init_slave>:
 }
 
-void parse_data(char* data){
- 688:	0f 93       	push	r16
- 68a:	1f 93       	push	r17
- 68c:	cf 93       	push	r28
- 68e:	df 93       	push	r29
- 690:	ec 01       	movw	r28, r24
-	int name_start = 0;
-	int j=0;
-	int i=0;
-	int mobile_start = 0;
+// Initialize SPI Slave Device
+void spi_init_slave (void)
+{
+	DDRB &= ~(1<<PINB5); //Set MOSI as input
+ 58c:	bd 98       	cbi	0x17, 5	; 23
+	DDRB &= ~(1<<PINB7); //Set SCK as input
+ 58e:	bf 98       	cbi	0x17, 7	; 23
+	DDRB |= (1<<PINB6);  //Set MISO as output
+ 590:	be 9a       	sbi	0x17, 6	; 23
+	DDRB &= ~(1<<PINB4);   //SS as input
+ 592:	bc 98       	cbi	0x17, 4	; 23
+	SPCR = (1<<SPE);   //Enable SPI
+ 594:	80 e4       	ldi	r24, 0x40	; 64
+ 596:	8d b9       	out	0x0d, r24	; 13
+ 598:	08 95       	ret
 
-	while(i < strlen(data)-1){
- 692:	fc 01       	movw	r30, r24
- 694:	01 90       	ld	r0, Z+
- 696:	00 20       	and	r0, r0
- 698:	e9 f7       	brne	.-6      	; 0x694 <parse_data+0xc>
- 69a:	31 97       	sbiw	r30, 0x01	; 1
- 69c:	af 01       	movw	r20, r30
- 69e:	48 1b       	sub	r20, r24
- 6a0:	59 0b       	sbc	r21, r25
- 6a2:	fc 01       	movw	r30, r24
- 6a4:	81 e0       	ldi	r24, 0x01	; 1
- 6a6:	90 e0       	ldi	r25, 0x00	; 0
-
-void parse_data(char* data){
-	int name_start = 0;
-	int j=0;
-	int i=0;
-	int mobile_start = 0;
- 6a8:	00 e0       	ldi	r16, 0x00	; 0
- 6aa:	10 e0       	ldi	r17, 0x00	; 0
-	Lcd4_Write_String(str);
+0000059a <spi_tranceiver>:
 }
 
-void parse_data(char* data){
-	int name_start = 0;
-	int j=0;
- 6ac:	a0 e0       	ldi	r26, 0x00	; 0
- 6ae:	b0 e0       	ldi	r27, 0x00	; 0
-	Lcd4_Set_Cursor(a,b);
-	Lcd4_Write_String(str);
-}
+char spi_tranceiver (char data)
+{
+	// Load data into the buffer
+	SPDR = data;
+ 59a:	8f b9       	out	0x0f, r24	; 15
+	//Wait until transmission complete
+	while(!(SPSR & (1<<SPIF) ));
+ 59c:	77 9b       	sbis	0x0e, 7	; 14
+ 59e:	fe cf       	rjmp	.-4      	; 0x59c <spi_tranceiver+0x2>
+	// Return received data
+	return(SPDR);
+ 5a0:	8f b1       	in	r24, 0x0f	; 15
+ 5a2:	08 95       	ret
 
-void parse_data(char* data){
-	int name_start = 0;
- 6b0:	60 e0       	ldi	r22, 0x00	; 0
- 6b2:	70 e0       	ldi	r23, 0x00	; 0
-	int j=0;
-	int i=0;
-	int mobile_start = 0;
-
-	while(i < strlen(data)-1){
- 6b4:	16 c0       	rjmp	.+44     	; 0x6e2 <parse_data+0x5a>
-		if(j==2){
- 6b6:	a2 30       	cpi	r26, 0x02	; 2
- 6b8:	b1 05       	cpc	r27, r1
- 6ba:	b1 f0       	breq	.+44     	; 0x6e8 <parse_data+0x60>
-			break;
-		}
-		if(data[i] == ':' && data[i+1] == '"'){
- 6bc:	21 91       	ld	r18, Z+
- 6be:	2a 33       	cpi	r18, 0x3A	; 58
- 6c0:	79 f4       	brne	.+30     	; 0x6e0 <parse_data+0x58>
- 6c2:	20 81       	ld	r18, Z
- 6c4:	22 32       	cpi	r18, 0x22	; 34
- 6c6:	61 f4       	brne	.+24     	; 0x6e0 <parse_data+0x58>
-			j++;
- 6c8:	11 96       	adiw	r26, 0x01	; 1
-			if(j==1){
- 6ca:	a1 30       	cpi	r26, 0x01	; 1
- 6cc:	b1 05       	cpc	r27, r1
- 6ce:	21 f4       	brne	.+8      	; 0x6d8 <parse_data+0x50>
- 6d0:	bc 01       	movw	r22, r24
- 6d2:	6f 5f       	subi	r22, 0xFF	; 255
- 6d4:	7f 4f       	sbci	r23, 0xFF	; 255
- 6d6:	04 c0       	rjmp	.+8      	; 0x6e0 <parse_data+0x58>
-				name_start = i+2;
-			}
-			else if(j==2){
- 6d8:	a2 30       	cpi	r26, 0x02	; 2
- 6da:	b1 05       	cpc	r27, r1
- 6dc:	09 f4       	brne	.+2      	; 0x6e0 <parse_data+0x58>
-				mobile_start = i+1;
- 6de:	8c 01       	movw	r16, r24
- 6e0:	01 96       	adiw	r24, 0x01	; 1
-	int name_start = 0;
-	int j=0;
-	int i=0;
-	int mobile_start = 0;
-
-	while(i < strlen(data)-1){
- 6e2:	48 17       	cp	r20, r24
- 6e4:	59 07       	cpc	r21, r25
- 6e6:	39 f7       	brne	.-50     	; 0x6b6 <parse_data+0x2e>
-				mobile_start = i+1;
-			}
-		}
-		i++;
-	}
-	strncpy(name,data+name_start,mobile_start-name_start-6);
- 6e8:	a8 01       	movw	r20, r16
- 6ea:	46 1b       	sub	r20, r22
- 6ec:	57 0b       	sbc	r21, r23
- 6ee:	46 50       	subi	r20, 0x06	; 6
- 6f0:	51 09       	sbc	r21, r1
- 6f2:	6c 0f       	add	r22, r28
- 6f4:	7d 1f       	adc	r23, r29
- 6f6:	85 e1       	ldi	r24, 0x15	; 21
- 6f8:	94 e0       	ldi	r25, 0x04	; 4
- 6fa:	0e 94 37 05 	call	0xa6e	; 0xa6e <strncpy>
-	strncpy(phone,data+mobile_start+1,12);
- 6fe:	b8 01       	movw	r22, r16
- 700:	6f 5f       	subi	r22, 0xFF	; 255
- 702:	7f 4f       	sbci	r23, 0xFF	; 255
- 704:	6c 0f       	add	r22, r28
- 706:	7d 1f       	adc	r23, r29
- 708:	4c e0       	ldi	r20, 0x0C	; 12
- 70a:	50 e0       	ldi	r21, 0x00	; 0
- 70c:	88 e0       	ldi	r24, 0x08	; 8
- 70e:	94 e0       	ldi	r25, 0x04	; 4
- 710:	0e 94 37 05 	call	0xa6e	; 0xa6e <strncpy>
- 714:	df 91       	pop	r29
- 716:	cf 91       	pop	r28
- 718:	1f 91       	pop	r17
- 71a:	0f 91       	pop	r16
- 71c:	08 95       	ret
-
-0000071e <query_database>:
-		Lcd4_Clear();
-		LCD_Write_xy(2,0,"You haven't paid");
-	}
-}
-
-void query_database(char* id){
- 71e:	ef 92       	push	r14
- 720:	ff 92       	push	r15
- 722:	0f 93       	push	r16
- 724:	1f 93       	push	r17
- 726:	cf 93       	push	r28
- 728:	df 93       	push	r29
- 72a:	cd b7       	in	r28, 0x3d	; 61
- 72c:	de b7       	in	r29, 0x3e	; 62
- 72e:	c0 59       	subi	r28, 0x90	; 144
- 730:	d1 40       	sbci	r29, 0x01	; 1
- 732:	0f b6       	in	r0, 0x3f	; 63
- 734:	f8 94       	cli
- 736:	de bf       	out	0x3e, r29	; 62
- 738:	0f be       	out	0x3f, r0	; 63
- 73a:	cd bf       	out	0x3d, r28	; 61
- 73c:	7c 01       	movw	r14, r24
-	GSM_interact(ENABLE_HTTP,"HTTP Enabled","HTTP is disable");
- 73e:	44 e6       	ldi	r20, 0x64	; 100
- 740:	51 e0       	ldi	r21, 0x01	; 1
- 742:	64 e7       	ldi	r22, 0x74	; 116
- 744:	71 e0       	ldi	r23, 0x01	; 1
- 746:	81 e8       	ldi	r24, 0x81	; 129
- 748:	91 e0       	ldi	r25, 0x01	; 1
- 74a:	0e 94 c6 02 	call	0x58c	; 0x58c <GSM_interact>
-	//GSM_interact(ENABLE_HTTPS,"HTTPS is disable");
-	GSM_interact(SET_PROFILE,"Profile set","Profile error");
- 74e:	4e e8       	ldi	r20, 0x8E	; 142
- 750:	51 e0       	ldi	r21, 0x01	; 1
- 752:	6c e9       	ldi	r22, 0x9C	; 156
- 754:	71 e0       	ldi	r23, 0x01	; 1
- 756:	88 ea       	ldi	r24, 0xA8	; 168
- 758:	91 e0       	ldi	r25, 0x01	; 1
- 75a:	0e 94 c6 02 	call	0x58c	; 0x58c <GSM_interact>
-	
-	char SET_URL[400];
-	strcpy(SET_URL,"AT+HTTPPARA=\"URL\",\"http://hardware-back.herokuapp.com/students/");
- 75e:	80 e4       	ldi	r24, 0x40	; 64
- 760:	ed eb       	ldi	r30, 0xBD	; 189
- 762:	f1 e0       	ldi	r31, 0x01	; 1
- 764:	8e 01       	movw	r16, r28
- 766:	0f 5f       	subi	r16, 0xFF	; 255
- 768:	1f 4f       	sbci	r17, 0xFF	; 255
- 76a:	d8 01       	movw	r26, r16
- 76c:	01 90       	ld	r0, Z+
- 76e:	0d 92       	st	X+, r0
- 770:	8a 95       	dec	r24
- 772:	e1 f7       	brne	.-8      	; 0x76c <query_database+0x4e>
-	strcat(SET_URL, id);
- 774:	b7 01       	movw	r22, r14
- 776:	c8 01       	movw	r24, r16
- 778:	0e 94 25 05 	call	0xa4a	; 0xa4a <strcat>
-	strcat(SET_URL,"\"\r");
- 77c:	f8 01       	movw	r30, r16
- 77e:	01 90       	ld	r0, Z+
- 780:	00 20       	and	r0, r0
- 782:	e9 f7       	brne	.-6      	; 0x77e <query_database+0x60>
- 784:	31 97       	sbiw	r30, 0x01	; 1
- 786:	82 e2       	ldi	r24, 0x22	; 34
- 788:	9d e0       	ldi	r25, 0x0D	; 13
- 78a:	91 83       	std	Z+1, r25	; 0x01
- 78c:	80 83       	st	Z, r24
- 78e:	12 82       	std	Z+2, r1	; 0x02
-	
-	GSM_interact(SET_URL,"URL Success","URL error");
- 790:	4d ef       	ldi	r20, 0xFD	; 253
- 792:	51 e0       	ldi	r21, 0x01	; 1
- 794:	67 e0       	ldi	r22, 0x07	; 7
- 796:	72 e0       	ldi	r23, 0x02	; 2
- 798:	c8 01       	movw	r24, r16
- 79a:	0e 94 c6 02 	call	0x58c	; 0x58c <GSM_interact>
-	
-	//GSM_interact("AT+HTTPSSL?\r","NOT HTTPS");
-	GSM_interact(START_GET,"GET success","GET error");
- 79e:	43 e1       	ldi	r20, 0x13	; 19
- 7a0:	52 e0       	ldi	r21, 0x02	; 2
- 7a2:	6d e1       	ldi	r22, 0x1D	; 29
- 7a4:	72 e0       	ldi	r23, 0x02	; 2
- 7a6:	89 e2       	ldi	r24, 0x29	; 41
- 7a8:	92 e0       	ldi	r25, 0x02	; 2
- 7aa:	0e 94 c6 02 	call	0x58c	; 0x58c <GSM_interact>
-	#else
-		//round up by default
-		__ticks_dc = (uint32_t)(ceil(fabs(__tmp)));
-	#endif
-
-	__builtin_avr_delay_cycles(__ticks_dc);
- 7ae:	2f ef       	ldi	r18, 0xFF	; 255
- 7b0:	8d e3       	ldi	r24, 0x3D	; 61
- 7b2:	99 e4       	ldi	r25, 0x49	; 73
- 7b4:	21 50       	subi	r18, 0x01	; 1
- 7b6:	80 40       	sbci	r24, 0x00	; 0
- 7b8:	90 40       	sbci	r25, 0x00	; 0
- 7ba:	e1 f7       	brne	.-8      	; 0x7b4 <query_database+0x96>
- 7bc:	00 c0       	rjmp	.+0      	; 0x7be <query_database+0xa0>
- 7be:	00 00       	nop
-	_delay_ms(3000);//This delay is essential for retrieving information.don't remove it.
-	memset(buff,0,160);
- 7c0:	06 ec       	ldi	r16, 0xC6	; 198
- 7c2:	12 e0       	ldi	r17, 0x02	; 2
- 7c4:	0f 2e       	mov	r0, r31
- 7c6:	f0 ea       	ldi	r31, 0xA0	; 160
- 7c8:	ff 2e       	mov	r15, r31
- 7ca:	f0 2d       	mov	r31, r0
- 7cc:	d8 01       	movw	r26, r16
- 7ce:	ef 2d       	mov	r30, r15
- 7d0:	1d 92       	st	X+, r1
- 7d2:	ea 95       	dec	r30
- 7d4:	e9 f7       	brne	.-6      	; 0x7d0 <query_database+0xb2>
-	//_delay_ms(3000);
-	buffer_pointer = 0;
- 7d6:	10 92 07 04 	sts	0x0407, r1	; 0x800407 <buffer_pointer+0x1>
- 7da:	10 92 06 04 	sts	0x0406, r1	; 0x800406 <buffer_pointer>
- 7de:	ff ef       	ldi	r31, 0xFF	; 255
- 7e0:	29 e6       	ldi	r18, 0x69	; 105
- 7e2:	88 e1       	ldi	r24, 0x18	; 24
- 7e4:	f1 50       	subi	r31, 0x01	; 1
- 7e6:	20 40       	sbci	r18, 0x00	; 0
- 7e8:	80 40       	sbci	r24, 0x00	; 0
- 7ea:	e1 f7       	brne	.-8      	; 0x7e4 <query_database+0xc6>
- 7ec:	00 c0       	rjmp	.+0      	; 0x7ee <query_database+0xd0>
- 7ee:	00 00       	nop
-	_delay_ms(1000); 
-	Lcd4_Clear();
- 7f0:	0e 94 ee 01 	call	0x3dc	; 0x3dc <Lcd4_Clear>
-	LCD_Write_xy(1,1,"0");
- 7f4:	4a e3       	ldi	r20, 0x3A	; 58
- 7f6:	52 e0       	ldi	r21, 0x02	; 2
- 7f8:	61 e0       	ldi	r22, 0x01	; 1
- 7fa:	81 e0       	ldi	r24, 0x01	; 1
- 7fc:	0e 94 bb 02 	call	0x576	; 0x576 <LCD_Write_xy>
-	USART_SendString(READ_DATA);
- 800:	8c e3       	ldi	r24, 0x3C	; 60
- 802:	92 e0       	ldi	r25, 0x02	; 2
- 804:	0e 94 f4 04 	call	0x9e8	; 0x9e8 <USART_SendString>
-	Lcd4_Clear();
- 808:	0e 94 ee 01 	call	0x3dc	; 0x3dc <Lcd4_Clear>
-	LCD_Write_xy(1,1,"1");
- 80c:	49 e4       	ldi	r20, 0x49	; 73
- 80e:	52 e0       	ldi	r21, 0x02	; 2
- 810:	61 e0       	ldi	r22, 0x01	; 1
- 812:	81 e0       	ldi	r24, 0x01	; 1
- 814:	0e 94 bb 02 	call	0x576	; 0x576 <LCD_Write_xy>
- 818:	9f ef       	ldi	r25, 0xFF	; 255
- 81a:	a1 e1       	ldi	r26, 0x11	; 17
- 81c:	ba e7       	ldi	r27, 0x7A	; 122
- 81e:	91 50       	subi	r25, 0x01	; 1
- 820:	a0 40       	sbci	r26, 0x00	; 0
- 822:	b0 40       	sbci	r27, 0x00	; 0
- 824:	e1 f7       	brne	.-8      	; 0x81e <query_database+0x100>
- 826:	00 c0       	rjmp	.+0      	; 0x828 <query_database+0x10a>
- 828:	00 00       	nop
-	Lcd4_Clear();
-	LCD_Write_xy(1,1,"2");
-	strncpy(data, buff+30,buffer_pointer);*/
-	
-	
-	strcpy(data,buff);
- 82a:	b8 01       	movw	r22, r16
- 82c:	86 e6       	ldi	r24, 0x66	; 102
- 82e:	93 e0       	ldi	r25, 0x03	; 3
- 830:	0e 94 30 05 	call	0xa60	; 0xa60 <strcpy>
-	Lcd4_Clear();
- 834:	0e 94 ee 01 	call	0x3dc	; 0x3dc <Lcd4_Clear>
-	LCD_Write_xy(1,1,"Please wait");
- 838:	4b e4       	ldi	r20, 0x4B	; 75
- 83a:	52 e0       	ldi	r21, 0x02	; 2
- 83c:	61 e0       	ldi	r22, 0x01	; 1
- 83e:	81 e0       	ldi	r24, 0x01	; 1
- 840:	0e 94 bb 02 	call	0x576	; 0x576 <LCD_Write_xy>
- 844:	ef ef       	ldi	r30, 0xFF	; 255
- 846:	fd e3       	ldi	r31, 0x3D	; 61
- 848:	29 e4       	ldi	r18, 0x49	; 73
- 84a:	e1 50       	subi	r30, 0x01	; 1
- 84c:	f0 40       	sbci	r31, 0x00	; 0
- 84e:	20 40       	sbci	r18, 0x00	; 0
- 850:	e1 f7       	brne	.-8      	; 0x84a <query_database+0x12c>
- 852:	00 c0       	rjmp	.+0      	; 0x854 <query_database+0x136>
- 854:	00 00       	nop
-	_delay_ms(3000);
-	parse_data(data);
- 856:	86 e6       	ldi	r24, 0x66	; 102
- 858:	93 e0       	ldi	r25, 0x03	; 3
- 85a:	0e 94 44 03 	call	0x688	; 0x688 <parse_data>
-	Lcd4_Clear();
- 85e:	0e 94 ee 01 	call	0x3dc	; 0x3dc <Lcd4_Clear>
- 862:	8f ef       	ldi	r24, 0xFF	; 255
- 864:	9d e3       	ldi	r25, 0x3D	; 61
- 866:	a9 e4       	ldi	r26, 0x49	; 73
- 868:	81 50       	subi	r24, 0x01	; 1
- 86a:	90 40       	sbci	r25, 0x00	; 0
- 86c:	a0 40       	sbci	r26, 0x00	; 0
- 86e:	e1 f7       	brne	.-8      	; 0x868 <__stack+0x9>
- 870:	00 c0       	rjmp	.+0      	; 0x872 <__stack+0x13>
- 872:	00 00       	nop
-	//LCD_Write_xy(1,1,data);
-	_delay_ms(3000);
-	Lcd4_Clear();
- 874:	0e 94 ee 01 	call	0x3dc	; 0x3dc <Lcd4_Clear>
-	Lcd4_Write_String(name);
- 878:	85 e1       	ldi	r24, 0x15	; 21
- 87a:	94 e0       	ldi	r25, 0x04	; 4
- 87c:	0e 94 89 02 	call	0x512	; 0x512 <Lcd4_Write_String>
- 880:	bf ef       	ldi	r27, 0xFF	; 255
- 882:	ed e3       	ldi	r30, 0x3D	; 61
- 884:	f9 e4       	ldi	r31, 0x49	; 73
- 886:	b1 50       	subi	r27, 0x01	; 1
- 888:	e0 40       	sbci	r30, 0x00	; 0
- 88a:	f0 40       	sbci	r31, 0x00	; 0
- 88c:	e1 f7       	brne	.-8      	; 0x886 <__stack+0x27>
- 88e:	00 c0       	rjmp	.+0      	; 0x890 <__stack+0x31>
- 890:	00 00       	nop
-	_delay_ms(3000);
-	Lcd4_Clear();
- 892:	0e 94 ee 01 	call	0x3dc	; 0x3dc <Lcd4_Clear>
-	Lcd4_Write_String(phone);
- 896:	88 e0       	ldi	r24, 0x08	; 8
- 898:	94 e0       	ldi	r25, 0x04	; 4
- 89a:	0e 94 89 02 	call	0x512	; 0x512 <Lcd4_Write_String>
- 89e:	2f ef       	ldi	r18, 0xFF	; 255
- 8a0:	8d e3       	ldi	r24, 0x3D	; 61
- 8a2:	99 e4       	ldi	r25, 0x49	; 73
- 8a4:	21 50       	subi	r18, 0x01	; 1
- 8a6:	80 40       	sbci	r24, 0x00	; 0
- 8a8:	90 40       	sbci	r25, 0x00	; 0
- 8aa:	e1 f7       	brne	.-8      	; 0x8a4 <__stack+0x45>
- 8ac:	00 c0       	rjmp	.+0      	; 0x8ae <__stack+0x4f>
- 8ae:	00 00       	nop
-	_delay_ms(3000);
-	
-	memset(buff,0,160);
- 8b0:	d8 01       	movw	r26, r16
- 8b2:	1d 92       	st	X+, r1
- 8b4:	fa 94       	dec	r15
- 8b6:	e9 f7       	brne	.-6      	; 0x8b2 <__stack+0x53>
-	GSM_interact(TERMINATE_SESSION,"Terminated","Terminate Error");
- 8b8:	47 e5       	ldi	r20, 0x57	; 87
- 8ba:	52 e0       	ldi	r21, 0x02	; 2
- 8bc:	67 e6       	ldi	r22, 0x67	; 103
- 8be:	72 e0       	ldi	r23, 0x02	; 2
- 8c0:	82 e7       	ldi	r24, 0x72	; 114
- 8c2:	92 e0       	ldi	r25, 0x02	; 2
- 8c4:	0e 94 c6 02 	call	0x58c	; 0x58c <GSM_interact>
-	
-	memset(data,0,50);
- 8c8:	82 e3       	ldi	r24, 0x32	; 50
- 8ca:	e6 e6       	ldi	r30, 0x66	; 102
- 8cc:	f3 e0       	ldi	r31, 0x03	; 3
- 8ce:	df 01       	movw	r26, r30
- 8d0:	1d 92       	st	X+, r1
- 8d2:	8a 95       	dec	r24
- 8d4:	e9 f7       	brne	.-6      	; 0x8d0 <__stack+0x71>
-	GSM_interact(DISABLE_GPRS,"GPRS disable","ERROR DISABLING");
- 8d6:	4f e7       	ldi	r20, 0x7F	; 127
- 8d8:	52 e0       	ldi	r21, 0x02	; 2
- 8da:	6f e8       	ldi	r22, 0x8F	; 143
- 8dc:	72 e0       	ldi	r23, 0x02	; 2
- 8de:	8c e9       	ldi	r24, 0x9C	; 156
- 8e0:	92 e0       	ldi	r25, 0x02	; 2
- 8e2:	0e 94 c6 02 	call	0x58c	; 0x58c <GSM_interact>
-}
- 8e6:	c0 57       	subi	r28, 0x70	; 112
- 8e8:	de 4f       	sbci	r29, 0xFE	; 254
- 8ea:	0f b6       	in	r0, 0x3f	; 63
- 8ec:	f8 94       	cli
- 8ee:	de bf       	out	0x3e, r29	; 62
- 8f0:	0f be       	out	0x3f, r0	; 63
- 8f2:	cd bf       	out	0x3d, r28	; 61
- 8f4:	df 91       	pop	r29
- 8f6:	cf 91       	pop	r28
- 8f8:	1f 91       	pop	r17
- 8fa:	0f 91       	pop	r16
- 8fc:	ff 90       	pop	r15
- 8fe:	ef 90       	pop	r14
- 900:	08 95       	ret
-
-00000902 <main>:
+000005a4 <main>:
 volatile int buffer_pointer;
 int position = 0;
 
 int main(void)
 {
 	DDRD = 0b11110000;
- 902:	80 ef       	ldi	r24, 0xF0	; 240
- 904:	81 bb       	out	0x11, r24	; 17
+ 5a4:	80 ef       	ldi	r24, 0xF0	; 240
+ 5a6:	81 bb       	out	0x11, r24	; 17
 	DDRC = 0b11000000;
- 906:	80 ec       	ldi	r24, 0xC0	; 192
- 908:	84 bb       	out	0x14, r24	; 20
+ 5a8:	80 ec       	ldi	r24, 0xC0	; 192
+ 5aa:	84 bb       	out	0x14, r24	; 20
 	buffer_pointer = 0;
- 90a:	10 92 07 04 	sts	0x0407, r1	; 0x800407 <buffer_pointer+0x1>
- 90e:	10 92 06 04 	sts	0x0406, r1	; 0x800406 <buffer_pointer>
+ 5ac:	10 92 0f 04 	sts	0x040F, r1	; 0x80040f <buffer_pointer+0x1>
+ 5b0:	10 92 0e 04 	sts	0x040E, r1	; 0x80040e <buffer_pointer>
 	Lcd4_Init();
- 912:	0e 94 12 02 	call	0x424	; 0x424 <Lcd4_Init>
+ 5b4:	0e 94 12 02 	call	0x424	; 0x424 <Lcd4_Init>
 	Lcd4_Clear();
- 916:	0e 94 ee 01 	call	0x3dc	; 0x3dc <Lcd4_Clear>
+ 5b8:	0e 94 ee 01 	call	0x3dc	; 0x3dc <Lcd4_Clear>
+	spi_init_slave();
+ 5bc:	0e 94 c6 02 	call	0x58c	; 0x58c <spi_init_slave>
 	LCD_Write_xy(1,4,"Group 35");
- 91a:	4b ea       	ldi	r20, 0xAB	; 171
- 91c:	52 e0       	ldi	r21, 0x02	; 2
- 91e:	64 e0       	ldi	r22, 0x04	; 4
- 920:	81 e0       	ldi	r24, 0x01	; 1
- 922:	0e 94 bb 02 	call	0x576	; 0x576 <LCD_Write_xy>
- 926:	2f ef       	ldi	r18, 0xFF	; 255
- 928:	89 e6       	ldi	r24, 0x69	; 105
- 92a:	98 e1       	ldi	r25, 0x18	; 24
- 92c:	21 50       	subi	r18, 0x01	; 1
- 92e:	80 40       	sbci	r24, 0x00	; 0
- 930:	90 40       	sbci	r25, 0x00	; 0
- 932:	e1 f7       	brne	.-8      	; 0x92c <main+0x2a>
- 934:	00 c0       	rjmp	.+0      	; 0x936 <main+0x34>
- 936:	00 00       	nop
+ 5c0:	43 eb       	ldi	r20, 0xB3	; 179
+ 5c2:	52 e0       	ldi	r21, 0x02	; 2
+ 5c4:	64 e0       	ldi	r22, 0x04	; 4
+ 5c6:	81 e0       	ldi	r24, 0x01	; 1
+ 5c8:	0e 94 bb 02 	call	0x576	; 0x576 <LCD_Write_xy>
+	#else
+		//round up by default
+		__ticks_dc = (uint32_t)(ceil(fabs(__tmp)));
+	#endif
+
+	__builtin_avr_delay_cycles(__ticks_dc);
+ 5cc:	2f ef       	ldi	r18, 0xFF	; 255
+ 5ce:	89 e6       	ldi	r24, 0x69	; 105
+ 5d0:	98 e1       	ldi	r25, 0x18	; 24
+ 5d2:	21 50       	subi	r18, 0x01	; 1
+ 5d4:	80 40       	sbci	r24, 0x00	; 0
+ 5d6:	90 40       	sbci	r25, 0x00	; 0
+ 5d8:	e1 f7       	brne	.-8      	; 0x5d2 <main+0x2e>
+ 5da:	00 c0       	rjmp	.+0      	; 0x5dc <main+0x38>
+ 5dc:	00 00       	nop
 	_delay_ms(1000);
 	LCD_Write_xy(2,1,"   Starting..   ");
- 938:	44 eb       	ldi	r20, 0xB4	; 180
- 93a:	52 e0       	ldi	r21, 0x02	; 2
- 93c:	61 e0       	ldi	r22, 0x01	; 1
- 93e:	82 e0       	ldi	r24, 0x02	; 2
- 940:	0e 94 bb 02 	call	0x576	; 0x576 <LCD_Write_xy>
- 944:	2f ef       	ldi	r18, 0xFF	; 255
- 946:	89 e6       	ldi	r24, 0x69	; 105
- 948:	98 e1       	ldi	r25, 0x18	; 24
- 94a:	21 50       	subi	r18, 0x01	; 1
- 94c:	80 40       	sbci	r24, 0x00	; 0
- 94e:	90 40       	sbci	r25, 0x00	; 0
- 950:	e1 f7       	brne	.-8      	; 0x94a <main+0x48>
- 952:	00 c0       	rjmp	.+0      	; 0x954 <main+0x52>
- 954:	00 00       	nop
+ 5de:	4c eb       	ldi	r20, 0xBC	; 188
+ 5e0:	52 e0       	ldi	r21, 0x02	; 2
+ 5e2:	61 e0       	ldi	r22, 0x01	; 1
+ 5e4:	82 e0       	ldi	r24, 0x02	; 2
+ 5e6:	0e 94 bb 02 	call	0x576	; 0x576 <LCD_Write_xy>
+ 5ea:	2f ef       	ldi	r18, 0xFF	; 255
+ 5ec:	89 e6       	ldi	r24, 0x69	; 105
+ 5ee:	98 e1       	ldi	r25, 0x18	; 24
+ 5f0:	21 50       	subi	r18, 0x01	; 1
+ 5f2:	80 40       	sbci	r24, 0x00	; 0
+ 5f4:	90 40       	sbci	r25, 0x00	; 0
+ 5f6:	e1 f7       	brne	.-8      	; 0x5f0 <main+0x4c>
+ 5f8:	00 c0       	rjmp	.+0      	; 0x5fa <main+0x56>
+ 5fa:	00 00       	nop
 	_delay_ms(1000);
 	USART_Init(9600);	//initialize USART
- 956:	60 e8       	ldi	r22, 0x80	; 128
- 958:	75 e2       	ldi	r23, 0x25	; 37
- 95a:	80 e0       	ldi	r24, 0x00	; 0
- 95c:	90 e0       	ldi	r25, 0x00	; 0
- 95e:	0e 94 c2 04 	call	0x984	; 0x984 <USART_Init>
+ 5fc:	60 e8       	ldi	r22, 0x80	; 128
+ 5fe:	75 e2       	ldi	r23, 0x25	; 37
+ 600:	80 e0       	ldi	r24, 0x00	; 0
+ 602:	90 e0       	ldi	r25, 0x00	; 0
+ 604:	0e 94 21 03 	call	0x642	; 0x642 <USART_Init>
 	sei();//enable global interrupts
- 962:	78 94       	sei
-	GSM_setup();
- 964:	0e 94 23 03 	call	0x646	; 0x646 <GSM_setup>
- 968:	2f ef       	ldi	r18, 0xFF	; 255
- 96a:	89 e6       	ldi	r24, 0x69	; 105
- 96c:	98 e1       	ldi	r25, 0x18	; 24
- 96e:	21 50       	subi	r18, 0x01	; 1
- 970:	80 40       	sbci	r24, 0x00	; 0
- 972:	90 40       	sbci	r25, 0x00	; 0
- 974:	e1 f7       	brne	.-8      	; 0x96e <main+0x6c>
- 976:	00 c0       	rjmp	.+0      	; 0x978 <main+0x76>
- 978:	00 00       	nop
+ 608:	78 94       	sei
+ 60a:	2f ef       	ldi	r18, 0xFF	; 255
+ 60c:	89 e6       	ldi	r24, 0x69	; 105
+ 60e:	98 e1       	ldi	r25, 0x18	; 24
+ 610:	21 50       	subi	r18, 0x01	; 1
+ 612:	80 40       	sbci	r24, 0x00	; 0
+ 614:	90 40       	sbci	r25, 0x00	; 0
+ 616:	e1 f7       	brne	.-8      	; 0x610 <main+0x6c>
+ 618:	00 c0       	rjmp	.+0      	; 0x61a <main+0x76>
+ 61a:	00 00       	nop
+	//GSM_setup();
 	_delay_ms(1000);
-query_database("1");
- 97a:	89 e4       	ldi	r24, 0x49	; 73
- 97c:	92 e0       	ldi	r25, 0x02	; 2
- 97e:	0e 94 8f 03 	call	0x71e	; 0x71e <query_database>
- 982:	ff cf       	rjmp	.-2      	; 0x982 <main+0x80>
+	char t = spi_tranceiver('l');
+ 61c:	8c e6       	ldi	r24, 0x6C	; 108
+ 61e:	0e 94 cd 02 	call	0x59a	; 0x59a <spi_tranceiver>
+ 622:	c8 2f       	mov	r28, r24
+ 624:	2f ef       	ldi	r18, 0xFF	; 255
+ 626:	8d e3       	ldi	r24, 0x3D	; 61
+ 628:	99 e4       	ldi	r25, 0x49	; 73
+ 62a:	21 50       	subi	r18, 0x01	; 1
+ 62c:	80 40       	sbci	r24, 0x00	; 0
+ 62e:	90 40       	sbci	r25, 0x00	; 0
+ 630:	e1 f7       	brne	.-8      	; 0x62a <main+0x86>
+ 632:	00 c0       	rjmp	.+0      	; 0x634 <main+0x90>
+ 634:	00 00       	nop
+	_delay_ms(3000);
+	Lcd4_Clear();
+ 636:	0e 94 ee 01 	call	0x3dc	; 0x3dc <Lcd4_Clear>
+	Lcd4_Write_Char(t);
+ 63a:	8c 2f       	mov	r24, r28
+ 63c:	0e 94 46 02 	call	0x48c	; 0x48c <Lcd4_Write_Char>
+ 640:	ff cf       	rjmp	.-2      	; 0x640 <main+0x9c>
 
-00000984 <USART_Init>:
- 984:	2a b1       	in	r18, 0x0a	; 10
- 986:	28 69       	ori	r18, 0x98	; 152
- 988:	2a b9       	out	0x0a, r18	; 10
- 98a:	20 b5       	in	r18, 0x20	; 32
- 98c:	26 68       	ori	r18, 0x86	; 134
- 98e:	20 bd       	out	0x20, r18	; 32
- 990:	dc 01       	movw	r26, r24
- 992:	cb 01       	movw	r24, r22
- 994:	88 0f       	add	r24, r24
- 996:	99 1f       	adc	r25, r25
- 998:	aa 1f       	adc	r26, r26
- 99a:	bb 1f       	adc	r27, r27
- 99c:	88 0f       	add	r24, r24
- 99e:	99 1f       	adc	r25, r25
- 9a0:	aa 1f       	adc	r26, r26
- 9a2:	bb 1f       	adc	r27, r27
- 9a4:	9c 01       	movw	r18, r24
- 9a6:	ad 01       	movw	r20, r26
- 9a8:	22 0f       	add	r18, r18
- 9aa:	33 1f       	adc	r19, r19
- 9ac:	44 1f       	adc	r20, r20
- 9ae:	55 1f       	adc	r21, r21
- 9b0:	22 0f       	add	r18, r18
- 9b2:	33 1f       	adc	r19, r19
- 9b4:	44 1f       	adc	r20, r20
- 9b6:	55 1f       	adc	r21, r21
- 9b8:	60 e0       	ldi	r22, 0x00	; 0
- 9ba:	72 e1       	ldi	r23, 0x12	; 18
- 9bc:	8a e7       	ldi	r24, 0x7A	; 122
- 9be:	90 e0       	ldi	r25, 0x00	; 0
- 9c0:	0e 94 03 05 	call	0xa06	; 0xa06 <__udivmodsi4>
- 9c4:	8f ef       	ldi	r24, 0xFF	; 255
- 9c6:	82 0f       	add	r24, r18
- 9c8:	89 b9       	out	0x09, r24	; 9
- 9ca:	da 01       	movw	r26, r20
- 9cc:	c9 01       	movw	r24, r18
- 9ce:	01 97       	sbiw	r24, 0x01	; 1
- 9d0:	a1 09       	sbc	r26, r1
- 9d2:	b1 09       	sbc	r27, r1
- 9d4:	89 2f       	mov	r24, r25
- 9d6:	9a 2f       	mov	r25, r26
- 9d8:	ab 2f       	mov	r26, r27
- 9da:	bb 27       	eor	r27, r27
- 9dc:	80 bd       	out	0x20, r24	; 32
- 9de:	08 95       	ret
+00000642 <USART_Init>:
+ 642:	2a b1       	in	r18, 0x0a	; 10
+ 644:	28 69       	ori	r18, 0x98	; 152
+ 646:	2a b9       	out	0x0a, r18	; 10
+ 648:	20 b5       	in	r18, 0x20	; 32
+ 64a:	26 68       	ori	r18, 0x86	; 134
+ 64c:	20 bd       	out	0x20, r18	; 32
+ 64e:	dc 01       	movw	r26, r24
+ 650:	cb 01       	movw	r24, r22
+ 652:	88 0f       	add	r24, r24
+ 654:	99 1f       	adc	r25, r25
+ 656:	aa 1f       	adc	r26, r26
+ 658:	bb 1f       	adc	r27, r27
+ 65a:	88 0f       	add	r24, r24
+ 65c:	99 1f       	adc	r25, r25
+ 65e:	aa 1f       	adc	r26, r26
+ 660:	bb 1f       	adc	r27, r27
+ 662:	9c 01       	movw	r18, r24
+ 664:	ad 01       	movw	r20, r26
+ 666:	22 0f       	add	r18, r18
+ 668:	33 1f       	adc	r19, r19
+ 66a:	44 1f       	adc	r20, r20
+ 66c:	55 1f       	adc	r21, r21
+ 66e:	22 0f       	add	r18, r18
+ 670:	33 1f       	adc	r19, r19
+ 672:	44 1f       	adc	r20, r20
+ 674:	55 1f       	adc	r21, r21
+ 676:	60 e0       	ldi	r22, 0x00	; 0
+ 678:	72 e1       	ldi	r23, 0x12	; 18
+ 67a:	8a e7       	ldi	r24, 0x7A	; 122
+ 67c:	90 e0       	ldi	r25, 0x00	; 0
+ 67e:	0e 94 4f 03 	call	0x69e	; 0x69e <__udivmodsi4>
+ 682:	8f ef       	ldi	r24, 0xFF	; 255
+ 684:	82 0f       	add	r24, r18
+ 686:	89 b9       	out	0x09, r24	; 9
+ 688:	da 01       	movw	r26, r20
+ 68a:	c9 01       	movw	r24, r18
+ 68c:	01 97       	sbiw	r24, 0x01	; 1
+ 68e:	a1 09       	sbc	r26, r1
+ 690:	b1 09       	sbc	r27, r1
+ 692:	89 2f       	mov	r24, r25
+ 694:	9a 2f       	mov	r25, r26
+ 696:	ab 2f       	mov	r26, r27
+ 698:	bb 27       	eor	r27, r27
+ 69a:	80 bd       	out	0x20, r24	; 32
+ 69c:	08 95       	ret
 
-000009e0 <USART_TxChar>:
- 9e0:	8c b9       	out	0x0c, r24	; 12
- 9e2:	5d 9b       	sbis	0x0b, 5	; 11
- 9e4:	fe cf       	rjmp	.-4      	; 0x9e2 <USART_TxChar+0x2>
- 9e6:	08 95       	ret
+0000069e <__udivmodsi4>:
+ 69e:	a1 e2       	ldi	r26, 0x21	; 33
+ 6a0:	1a 2e       	mov	r1, r26
+ 6a2:	aa 1b       	sub	r26, r26
+ 6a4:	bb 1b       	sub	r27, r27
+ 6a6:	fd 01       	movw	r30, r26
+ 6a8:	0d c0       	rjmp	.+26     	; 0x6c4 <__udivmodsi4_ep>
 
-000009e8 <USART_SendString>:
- 9e8:	cf 93       	push	r28
- 9ea:	df 93       	push	r29
- 9ec:	ec 01       	movw	r28, r24
- 9ee:	88 81       	ld	r24, Y
- 9f0:	88 23       	and	r24, r24
- 9f2:	31 f0       	breq	.+12     	; 0xa00 <USART_SendString+0x18>
- 9f4:	21 96       	adiw	r28, 0x01	; 1
- 9f6:	0e 94 f0 04 	call	0x9e0	; 0x9e0 <USART_TxChar>
- 9fa:	89 91       	ld	r24, Y+
- 9fc:	81 11       	cpse	r24, r1
- 9fe:	fb cf       	rjmp	.-10     	; 0x9f6 <USART_SendString+0xe>
- a00:	df 91       	pop	r29
- a02:	cf 91       	pop	r28
- a04:	08 95       	ret
+000006aa <__udivmodsi4_loop>:
+ 6aa:	aa 1f       	adc	r26, r26
+ 6ac:	bb 1f       	adc	r27, r27
+ 6ae:	ee 1f       	adc	r30, r30
+ 6b0:	ff 1f       	adc	r31, r31
+ 6b2:	a2 17       	cp	r26, r18
+ 6b4:	b3 07       	cpc	r27, r19
+ 6b6:	e4 07       	cpc	r30, r20
+ 6b8:	f5 07       	cpc	r31, r21
+ 6ba:	20 f0       	brcs	.+8      	; 0x6c4 <__udivmodsi4_ep>
+ 6bc:	a2 1b       	sub	r26, r18
+ 6be:	b3 0b       	sbc	r27, r19
+ 6c0:	e4 0b       	sbc	r30, r20
+ 6c2:	f5 0b       	sbc	r31, r21
 
-00000a06 <__udivmodsi4>:
- a06:	a1 e2       	ldi	r26, 0x21	; 33
- a08:	1a 2e       	mov	r1, r26
- a0a:	aa 1b       	sub	r26, r26
- a0c:	bb 1b       	sub	r27, r27
- a0e:	fd 01       	movw	r30, r26
- a10:	0d c0       	rjmp	.+26     	; 0xa2c <__udivmodsi4_ep>
+000006c4 <__udivmodsi4_ep>:
+ 6c4:	66 1f       	adc	r22, r22
+ 6c6:	77 1f       	adc	r23, r23
+ 6c8:	88 1f       	adc	r24, r24
+ 6ca:	99 1f       	adc	r25, r25
+ 6cc:	1a 94       	dec	r1
+ 6ce:	69 f7       	brne	.-38     	; 0x6aa <__udivmodsi4_loop>
+ 6d0:	60 95       	com	r22
+ 6d2:	70 95       	com	r23
+ 6d4:	80 95       	com	r24
+ 6d6:	90 95       	com	r25
+ 6d8:	9b 01       	movw	r18, r22
+ 6da:	ac 01       	movw	r20, r24
+ 6dc:	bd 01       	movw	r22, r26
+ 6de:	cf 01       	movw	r24, r30
+ 6e0:	08 95       	ret
 
-00000a12 <__udivmodsi4_loop>:
- a12:	aa 1f       	adc	r26, r26
- a14:	bb 1f       	adc	r27, r27
- a16:	ee 1f       	adc	r30, r30
- a18:	ff 1f       	adc	r31, r31
- a1a:	a2 17       	cp	r26, r18
- a1c:	b3 07       	cpc	r27, r19
- a1e:	e4 07       	cpc	r30, r20
- a20:	f5 07       	cpc	r31, r21
- a22:	20 f0       	brcs	.+8      	; 0xa2c <__udivmodsi4_ep>
- a24:	a2 1b       	sub	r26, r18
- a26:	b3 0b       	sbc	r27, r19
- a28:	e4 0b       	sbc	r30, r20
- a2a:	f5 0b       	sbc	r31, r21
+000006e2 <_exit>:
+ 6e2:	f8 94       	cli
 
-00000a2c <__udivmodsi4_ep>:
- a2c:	66 1f       	adc	r22, r22
- a2e:	77 1f       	adc	r23, r23
- a30:	88 1f       	adc	r24, r24
- a32:	99 1f       	adc	r25, r25
- a34:	1a 94       	dec	r1
- a36:	69 f7       	brne	.-38     	; 0xa12 <__udivmodsi4_loop>
- a38:	60 95       	com	r22
- a3a:	70 95       	com	r23
- a3c:	80 95       	com	r24
- a3e:	90 95       	com	r25
- a40:	9b 01       	movw	r18, r22
- a42:	ac 01       	movw	r20, r24
- a44:	bd 01       	movw	r22, r26
- a46:	cf 01       	movw	r24, r30
- a48:	08 95       	ret
-
-00000a4a <strcat>:
- a4a:	fb 01       	movw	r30, r22
- a4c:	dc 01       	movw	r26, r24
- a4e:	0d 90       	ld	r0, X+
- a50:	00 20       	and	r0, r0
- a52:	e9 f7       	brne	.-6      	; 0xa4e <strcat+0x4>
- a54:	11 97       	sbiw	r26, 0x01	; 1
- a56:	01 90       	ld	r0, Z+
- a58:	0d 92       	st	X+, r0
- a5a:	00 20       	and	r0, r0
- a5c:	e1 f7       	brne	.-8      	; 0xa56 <strcat+0xc>
- a5e:	08 95       	ret
-
-00000a60 <strcpy>:
- a60:	fb 01       	movw	r30, r22
- a62:	dc 01       	movw	r26, r24
- a64:	01 90       	ld	r0, Z+
- a66:	0d 92       	st	X+, r0
- a68:	00 20       	and	r0, r0
- a6a:	e1 f7       	brne	.-8      	; 0xa64 <strcpy+0x4>
- a6c:	08 95       	ret
-
-00000a6e <strncpy>:
- a6e:	fb 01       	movw	r30, r22
- a70:	dc 01       	movw	r26, r24
- a72:	41 50       	subi	r20, 0x01	; 1
- a74:	50 40       	sbci	r21, 0x00	; 0
- a76:	48 f0       	brcs	.+18     	; 0xa8a <strncpy+0x1c>
- a78:	01 90       	ld	r0, Z+
- a7a:	0d 92       	st	X+, r0
- a7c:	00 20       	and	r0, r0
- a7e:	c9 f7       	brne	.-14     	; 0xa72 <strncpy+0x4>
- a80:	01 c0       	rjmp	.+2      	; 0xa84 <strncpy+0x16>
- a82:	1d 92       	st	X+, r1
- a84:	41 50       	subi	r20, 0x01	; 1
- a86:	50 40       	sbci	r21, 0x00	; 0
- a88:	e0 f7       	brcc	.-8      	; 0xa82 <strncpy+0x14>
- a8a:	08 95       	ret
-
-00000a8c <strstr>:
- a8c:	fb 01       	movw	r30, r22
- a8e:	51 91       	ld	r21, Z+
- a90:	55 23       	and	r21, r21
- a92:	a9 f0       	breq	.+42     	; 0xabe <strstr+0x32>
- a94:	bf 01       	movw	r22, r30
- a96:	dc 01       	movw	r26, r24
- a98:	4d 91       	ld	r20, X+
- a9a:	45 17       	cp	r20, r21
- a9c:	41 11       	cpse	r20, r1
- a9e:	e1 f7       	brne	.-8      	; 0xa98 <strstr+0xc>
- aa0:	59 f4       	brne	.+22     	; 0xab8 <strstr+0x2c>
- aa2:	cd 01       	movw	r24, r26
- aa4:	01 90       	ld	r0, Z+
- aa6:	00 20       	and	r0, r0
- aa8:	49 f0       	breq	.+18     	; 0xabc <strstr+0x30>
- aaa:	4d 91       	ld	r20, X+
- aac:	40 15       	cp	r20, r0
- aae:	41 11       	cpse	r20, r1
- ab0:	c9 f3       	breq	.-14     	; 0xaa4 <strstr+0x18>
- ab2:	fb 01       	movw	r30, r22
- ab4:	41 11       	cpse	r20, r1
- ab6:	ef cf       	rjmp	.-34     	; 0xa96 <strstr+0xa>
- ab8:	81 e0       	ldi	r24, 0x01	; 1
- aba:	90 e0       	ldi	r25, 0x00	; 0
- abc:	01 97       	sbiw	r24, 0x01	; 1
- abe:	08 95       	ret
-
-00000ac0 <_exit>:
- ac0:	f8 94       	cli
-
-00000ac2 <__stop_program>:
- ac2:	ff cf       	rjmp	.-2      	; 0xac2 <__stop_program>
+000006e4 <__stop_program>:
+ 6e4:	ff cf       	rjmp	.-2      	; 0x6e4 <__stop_program>

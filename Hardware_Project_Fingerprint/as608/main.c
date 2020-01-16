@@ -11,6 +11,12 @@
 #include "r305.h"
 #include "lcd.h"
 
+#define MUX_A PC4
+#define MUX_B PC5
+
+#define FINGER_ENABLE 1
+#define GSM_ENABLE 2
+
 #define enroll_key_press() ((PINC & 0x01) == 0)
 #define finger_Scann_Key_press() ((PINC & 0x04) == 0)
 
@@ -19,6 +25,11 @@ void finger_enrollment();
 void finger_scan();
 void process_result(uint16_t ret);
 
+void mux(int);
+
+void spi_init_master (void);
+char spi_tranceiver(char data);
+
 
 int main(void)
 {
@@ -26,24 +37,31 @@ int main(void)
 	finger_init();
 	keys_init();
 	DDRC |= 1<<PINC5;
-	PORTC |= 1<<PINC5;
+	PORTC |= 1<<PINC5 | 1<<PINC4;
 	
-    
+	mux(FINGER_ENABLE);
+	LCDClear();
     while (1) 
     { 
 		LCDWriteStringXY(0,0,"Welcome!");
 		_delay_ms(2000);
-		if(enroll_key_press())
-		{
-			finger_enrollment();
-		}
-		else if (finger_Scann_Key_press())
-		{
-			finger_scan();
-		}
+		
+		finger_scan();
+		//finger_enrollment();
+		//while(finger_read()!=0x00);
 			
 		
     }
+}
+
+void mux(int val){
+	if(val == FINGER_ENABLE){
+		PORTC |= (1<<MUX_A);	
+		PORTC &= ~(1<<MUX_B);
+	}else{
+		PORTC &= ~(1<<MUX_A);
+		PORTC &= ~(1<<MUX_B);
+	}
 }
 
 void keys_init()
@@ -58,8 +76,8 @@ void keys_init()
 void finger_enrollment()
 {
 	LCDClear();
-	LCDWriteStringXY(0,0,"Deleting");
-	process_result(finger_delete_all());
+	//LCDWriteStringXY(0,0,"Deleting");
+	//process_result(finger_delete_all());
 	LCDClear();
 	LCDWriteStringXY(0,0,"Enrollment");
 	LCDWriteStringXY(0,1,"Place Finger");
@@ -92,7 +110,7 @@ void finger_scan()
 	LCDClear();
 	LCDWriteStringXY(0,0,"Welcome!");
 	LCDWriteStringXY(0,1,"Place finger");
-	while(finger_read()!=0x00);
+	process_result(finger_read());
 	LCDClear();
 	LCDWriteStringXY(0,0,"Scanning...");
 	_delay_ms(1000);
@@ -101,24 +119,15 @@ void finger_scan()
 	LCDClear();
 	LCDWriteStringXY(0,0,"generating char");
 	process_result(finger_generate_char_file(1));
+	process_result(finger_generate_char_file(2));
+	process_result(finger_generate_template());
 	LCDClear();
 	LCDWriteStringXY(0,0,"Searching...");
 	code = finger_search();
 	process_result(code);
-	if(code==0x00)
-	{
-			LCDClear();
-			// LCDWriteStringXY(0,1,"Success");
-			LCDWriteIntXY(0,1,code,6);
-		PORTC &=~(1<<PINC5);
-		_delay_ms(5000);
-		PORTC |= 1<<PINC5;
-	}
-	else{
-					LCDClear();
-					//LCDWriteStringXY(0,1,"Error");
-					LCDWriteIntXY(0,1,code,6);
-	}
+	//upImg();
+	//upChar(1);
+	//finger_store(1);
 	_delay_ms(4000);
 	LCDClear();
 }
@@ -128,4 +137,21 @@ void process_result(uint16_t ret)
    LCDClearLineXY(0,1);
    LCDWriteStringXY(0,1,finger_get_response_string(ret));
    _delay_ms(2000);	
+}
+
+//Initialize SPI Master Device
+void spi_init_master (void)
+{
+	DDRB = (1<<PINB5)|(1<<PINB3)|(1<<PINB2);              //Set MOSI, SCK , SS as Output
+	SPCR = (1<<SPE)|(1<<MSTR)|(1<<SPR1); //Enable SPI, Set as Master
+	SPCR &= ~(1<<SPR0);//f/64
+}
+
+//Function to send and receive data
+char spi_tranceiver (char data)
+{
+	PORTB &= ~(1<<PINB2); //sending low signal to activate slave
+	SPDR = data;                       //Load data into the buffer
+	while(!((SPSR)&(1<<SPIF)));          //wait till transmission complete
+	return(SPDR);                      //Return received data
 }
